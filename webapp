@@ -1,0 +1,1684 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Real Camifit – Método Queen 30D</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Poppins', sans-serif;
+            background: #fdfdfd;
+            color: #333;
+            overflow-x: hidden;
+        }
+        
+        .container {
+            max-width: 480px;
+            margin: 0 auto;
+            min-height: 100vh;
+            background: white;
+            position: relative;
+            box-shadow: 0 0 20px rgba(167, 125, 79, 0.1);
+        }
+        
+        .screen {
+            display: none;
+            min-height: 100vh;
+            padding: 20px;
+            animation: slideIn 0.3s ease-out;
+        }
+        
+        .screen.active {
+            display: block;
+        }
+        
+        @keyframes slideIn {
+            from { 
+                opacity: 0;
+                transform: translateX(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+        
+        .logo {
+            text-align: center;
+            font-size: 28px;
+            font-weight: 700;
+            color: #A77D4F;
+            margin: 40px 0 20px;
+            letter-spacing: -0.5px;
+        }
+        
+        .logo-small {
+            font-size: 22px;
+            margin: 20px 0 10px;
+        }
+        
+        .tagline {
+            text-align: center;
+            font-size: 18px;
+            font-weight: 400;
+            color: #666;
+            margin: 20px 0 40px;
+            line-height: 1.4;
+        }
+        
+        .hero-illustration {
+            width: 200px;
+            height: 200px;
+            margin: 40px auto;
+            background: linear-gradient(135deg, #A77D4F20, #A77D4F10);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 80px;
+            color: #A77D4F;
+        }
+        
+        .btn {
+            display: block;
+            width: 100%;
+            padding: 18px;
+            border: none;
+            border-radius: 25px;
+            font-family: 'Poppins', sans-serif;
+            font-size: 16px;
+            font-weight: 600;
+            text-align: center;
+            text-decoration: none;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin: 12px 0;
+        }
+        
+        .btn-primary {
+            background: #A77D4F;
+            color: white;
+        }
+        
+        .btn-primary:hover {
+            background: #956B3F;
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(167, 125, 79, 0.3);
+        }
+        
+        .btn-secondary {
+            background: transparent;
+            color: #A77D4F;
+            border: 2px solid #A77D4F;
+        }
+        
+        .btn-secondary:hover {
+            background: #A77D4F;
+            color: white;
+        }
+        
+        .menu-item {
+            background: white;
+            border: 1px solid #f0f0f0;
+            border-radius: 15px;
+            padding: 20px;
+            margin: 15px 0;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+        }
+        
+        .menu-item:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 25px rgba(167, 125, 79, 0.15);
+            border-color: #A77D4F;
+        }
+        
+        .menu-item.locked {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+        
+        .menu-item.locked:hover {
+            transform: none;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+        }
+        
+        .menu-item h3 {
+            color: #A77D4F;
+            font-size: 18px;
+            font-weight: 600;
+            margin-bottom: 8px;
+        }
+        
+        .menu-item p {
+            color: #666;
+            font-size: 14px;
+            line-height: 1.5;
+        }
+        
+        .menu-item i {
+            font-size: 24px;
+            color: #A77D4F;
+            margin-bottom: 10px;
+        }
+        
+        .week-card {
+            background: linear-gradient(135deg, #A77D4F, #C49564);
+            color: white;
+            border-radius: 20px;
+            padding: 25px;
+            margin: 15px 0;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .week-card:before {
+            content: '';
+            position: absolute;
+            top: 0;
+            right: 0;
+            width: 100px;
+            height: 100px;
+            background: rgba(255,255,255,0.1);
+            border-radius: 50%;
+            transform: translate(30px, -30px);
+        }
+        
+        .week-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 35px rgba(167, 125, 79, 0.3);
+        }
+        
+        .week-card.locked {
+            background: #ccc;
+            cursor: not-allowed;
+        }
+        
+        .week-card.locked:hover {
+            transform: none;
+        }
+        
+        .week-card h3 {
+            font-size: 20px;
+            font-weight: 700;
+            margin-bottom: 8px;
+        }
+        
+        .week-card p {
+            font-size: 14px;
+            opacity: 0.9;
+        }
+        
+        .back-btn {
+            position: fixed;
+            top: 20px;
+            left: 20px;
+            background: rgba(167, 125, 79, 0.1);
+            border: none;
+            width: 45px;
+            height: 45px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            z-index: 1000;
+            transition: all 0.3s ease;
+        }
+        
+        .back-btn:hover {
+            background: #A77D4F;
+            color: white;
+        }
+        
+        .back-btn i {
+            color: #A77D4F;
+            font-size: 18px;
+        }
+        
+        .back-btn:hover i {
+            color: white;
+        }
+        
+        .progress-bar {
+            width: 100%;
+            height: 8px;
+            background: #f0f0f0;
+            border-radius: 4px;
+            margin: 20px 0;
+            overflow: hidden;
+        }
+        
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #A77D4F, #C49564);
+            border-radius: 4px;
+            width: 0%;
+            transition: width 0.5s ease;
+        }
+        
+        .content-section {
+            background: white;
+            border-radius: 15px;
+            padding: 25px;
+            margin: 15px 0;
+            border: 1px solid #f0f0f0;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+        }
+        
+        .content-section h3 {
+            color: #A77D4F;
+            font-size: 18px;
+            font-weight: 600;
+            margin-bottom: 15px;
+        }
+        
+        .content-section p {
+            color: #555;
+            line-height: 1.6;
+            margin-bottom: 15px;
+        }
+        
+        .exercise-card {
+            background: #f8f8f8;
+            border-radius: 12px;
+            padding: 15px;
+            margin: 10px 0;
+            border-left: 4px solid #A77D4F;
+        }
+        
+        .exercise-card h4 {
+            color: #A77D4F;
+            font-weight: 600;
+            margin-bottom: 8px;
+        }
+        
+        .exercise-reps {
+            display: flex;
+            justify-content: space-between;
+            font-size: 14px;
+            color: #666;
+            margin: 5px 0;
+        }
+        
+        .checkbox {
+            display: flex;
+            align-items: center;
+            margin: 15px 0;
+            cursor: pointer;
+        }
+        
+        .checkbox input[type="checkbox"] {
+            width: 20px;
+            height: 20px;
+            margin-right: 12px;
+            accent-color: #A77D4F;
+        }
+        
+        .checkbox label {
+            color: #555;
+            font-weight: 500;
+        }
+        
+        .notes-area {
+            width: 100%;
+            min-height: 120px;
+            border: 2px solid #f0f0f0;
+            border-radius: 12px;
+            padding: 15px;
+            font-family: 'Poppins', sans-serif;
+            font-size: 14px;
+            resize: vertical;
+            transition: border-color 0.3s ease;
+        }
+        
+        .notes-area:focus {
+            outline: none;
+            border-color: #A77D4F;
+        }
+        
+        .stats-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+            margin: 20px 0;
+        }
+        
+        .stat-card {
+            background: white;
+            border-radius: 15px;
+            padding: 20px;
+            text-align: center;
+            border: 1px solid #f0f0f0;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+        }
+        
+        .stat-number {
+            font-size: 28px;
+            font-weight: 700;
+            color: #A77D4F;
+            display: block;
+        }
+        
+        .stat-label {
+            font-size: 14px;
+            color: #666;
+            margin-top: 5px;
+        }
+        
+        .auth-form {
+            background: white;
+            border-radius: 20px;
+            padding: 30px;
+            margin: 40px 0;
+            box-shadow: 0 8px 25px rgba(167, 125, 79, 0.1);
+        }
+        
+        .form-group {
+            margin: 20px 0;
+        }
+        
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            color: #555;
+            font-weight: 500;
+        }
+        
+        .form-group input {
+            width: 100%;
+            padding: 15px;
+            border: 2px solid #f0f0f0;
+            border-radius: 12px;
+            font-family: 'Poppins', sans-serif;
+            font-size: 16px;
+            transition: border-color 0.3s ease;
+        }
+        
+        .form-group input:focus {
+            outline: none;
+            border-color: #A77D4F;
+        }
+        
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.7);
+            z-index: 2000;
+            justify-content: center;
+            align-items: center;
+        }
+        
+        .modal.show {
+            display: flex;
+        }
+        
+        .modal-content {
+            background: white;
+            border-radius: 20px;
+            padding: 30px;
+            margin: 20px;
+            max-width: 400px;
+            max-height: 80vh;
+            overflow-y: auto;
+            position: relative;
+        }
+        
+        .modal-close {
+            position: absolute;
+            top: 15px;
+            right: 20px;
+            background: none;
+            border: none;
+            font-size: 24px;
+            cursor: pointer;
+            color: #999;
+        }
+        
+        .video-thumbnail {
+            width: 100%;
+            height: 200px;
+            background: #f0f0f0;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin: 10px 0;
+            position: relative;
+        }
+        
+        .video-thumbnail:hover {
+            transform: scale(1.02);
+        }
+        
+        .video-thumbnail i {
+            font-size: 48px;
+            color: #A77D4F;
+        }
+        
+        .bottom-nav {
+            position: fixed;
+            bottom: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 100%;
+            max-width: 480px;
+            background: white;
+            border-top: 1px solid #f0f0f0;
+            display: flex;
+            justify-content: space-around;
+            padding: 12px 0 20px;
+            box-shadow: 0 -4px 15px rgba(0,0,0,0.1);
+        }
+        
+        .nav-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            padding: 8px 12px;
+            border-radius: 12px;
+        }
+        
+        .nav-item:hover,
+        .nav-item.active {
+            background: rgba(167, 125, 79, 0.1);
+        }
+        
+        .nav-item i {
+            font-size: 20px;
+            color: #999;
+            margin-bottom: 4px;
+        }
+        
+        .nav-item:hover i,
+        .nav-item.active i {
+            color: #A77D4F;
+        }
+        
+        .nav-item span {
+            font-size: 12px;
+            color: #999;
+        }
+        
+        .nav-item:hover span,
+        .nav-item.active span {
+            color: #A77D4F;
+        }
+        
+        .week-motto {
+            text-align: center;
+            font-size: 22px;
+            font-weight: 700;
+            color: #A77D4F;
+            margin: 30px 0 20px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+        
+        .pillar-grid {
+            display: grid;
+            gap: 15px;
+            margin: 20px 0;
+        }
+        
+        .pillar-card {
+            background: white;
+            border-radius: 15px;
+            padding: 25px;
+            border: 2px solid #f0f0f0;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-align: center;
+        }
+        
+        .pillar-card:hover {
+            border-color: #A77D4F;
+            transform: translateY(-3px);
+            box-shadow: 0 8px 25px rgba(167, 125, 79, 0.15);
+        }
+        
+        .pillar-card.primary {
+            background: linear-gradient(135deg, #A77D4F, #C49564);
+            color: white;
+            border-color: #A77D4F;
+        }
+        
+        .pillar-card.secondary {
+            background: rgba(167, 125, 79, 0.1);
+        }
+        
+        .pillar-card i {
+            font-size: 32px;
+            margin-bottom: 15px;
+            color: #A77D4F;
+        }
+        
+        .pillar-card.primary i {
+            color: white;
+        }
+        
+        .pillar-card h3 {
+            font-size: 18px;
+            font-weight: 600;
+            margin-bottom: 8px;
+            color: #A77D4F;
+        }
+        
+        .pillar-card.primary h3 {
+            color: white;
+        }
+        
+        .screen-content {
+            padding-bottom: 100px;
+        }
+        
+        .food-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 15px;
+            margin: 20px 0;
+        }
+        
+        .food-card {
+            background: white;
+            border-radius: 12px;
+            padding: 15px;
+            text-align: center;
+            border: 1px solid #f0f0f0;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+        }
+        
+        .food-card i {
+            font-size: 24px;
+            color: #A77D4F;
+            margin-bottom: 8px;
+        }
+        
+        .food-card h4 {
+            font-size: 14px;
+            font-weight: 600;
+            color: #333;
+            margin-bottom: 5px;
+        }
+        
+        .food-card p {
+            font-size: 12px;
+            color: #666;
+        }
+        
+        @media (max-width: 360px) {
+            .container {
+                padding: 15px;
+            }
+            .logo {
+                font-size: 24px;
+            }
+            .btn {
+                padding: 16px;
+                font-size: 15px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- Pantalla 1: Bienvenida -->
+        <div class="screen active" id="welcome-screen">
+            <div class="screen-content">
+                <div class="logo">Real Camifit</div>
+                <div class="hero-illustration">
+                    <i class="fas fa-crown"></i>
+                </div>
+                <div class="tagline">30 días para representar<br>la mujer que eres</div>
+                
+                <button class="btn btn-primary" onclick="showScreen('objectives-screen')">
+                    Comenzar
+                </button>
+                
+                <button class="btn btn-secondary" onclick="showModal('login-modal')">
+                    <i class="fas fa-envelope"></i> Iniciar sesión con email
+                </button>
+                
+                <button class="btn btn-secondary" onclick="showModal('google-login-modal')">
+                    <i class="fab fa-google"></i> Continuar con Google
+                </button>
+            </div>
+        </div>
+
+        <!-- Pantalla 2: Objetivos del Programa -->
+        <div class="screen" id="objectives-screen">
+            <button class="back-btn" onclick="showScreen('welcome-screen')">
+                <i class="fas fa-arrow-left"></i>
+            </button>
+            <div class="screen-content">
+                <div class="logo logo-small">Real Camifit</div>
+                <h2 style="text-align: center; color: #A77D4F; margin-bottom: 30px;">Método Queen 30D</h2>
+                
+                <div class="menu-item" onclick="showModal('welcome-modal')">
+                    <i class="fas fa-heart"></i>
+                    <h3>Bienvenida</h3>
+                    <p>Conoce el mensaje de Cami y el resumen del programa</p>
+                </div>
+                
+                <div class="menu-item" onclick="showModal('how-to-modal')">
+                    <i class="fas fa-question-circle"></i>
+                    <h3>¿Cómo usar el programa?</h3>
+                    <p>Instrucciones, ritmo semanal y filosofía del método</p>
+                </div>
+                
+                <div class="menu-item" onclick="showScreen('weeks-screen')">
+                    <i class="fas fa-step-forward"></i>
+                    <h3>Paso a Paso</h3>
+                    <p>Accede a las 4 semanas del programa</p>
+                </div>
+                
+                <div class="menu-item" onclick="showModal('videocall-modal')">
+                    <i class="fas fa-video"></i>
+                    <h3>Acceso Videollamada Día 21</h3>
+                    <p>Únete a la reunión grupal del día 21</p>
+                </div>
+                
+                <div class="menu-item locked">
+                    <i class="fas fa-lock"></i>
+                    <h3>¿Y ahora qué?</h3>
+                    <p>Desbloquea al completar el programa</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Navegación inferior -->
+        <div class="bottom-nav">
+            <div class="nav-item active" onclick="showScreen('objectives-screen'); setActiveNav(this)">
+                <i class="fas fa-home"></i>
+                <span>Inicio</span>
+            </div>
+            <div class="nav-item" onclick="showScreen('weeks-screen'); setActiveNav(this)">
+                <i class="fas fa-calendar-alt"></i>
+                <span>Programa</span>
+            </div>
+            <div class="nav-item" onclick="showScreen('progress-screen'); setActiveNav(this)">
+                <i class="fas fa-chart-line"></i>
+                <span>Progreso</span>
+            </div>
+            <div class="nav-item" onclick="showScreen('community-screen'); setActiveNav(this)">
+                <i class="fas fa-users"></i>
+                <span>Comunidad</span>
+            </div>
+            <div class="nav-item" onclick="showScreen('profile-screen'); setActiveNav(this)">
+                <i class="fas fa-user"></i>
+                <span>Perfil</span>
+            </div>
+        </div>
+
+        <!-- Modales -->
+        <div class="modal" id="login-modal">
+            <div class="modal-content">
+                <button class="modal-close" onclick="closeModal('login-modal')">&times;</button>
+                <h2 style="color: #A77D4F; margin-bottom: 20px;">Iniciar Sesión</h2>
+                <div class="auth-form">
+                    <div class="form-group">
+                        <label for="email">Email</label>
+                        <input type="email" id="email" placeholder="tu@email.com">
+                    </div>
+                    <div class="form-group">
+                        <label for="password">Contraseña</label>
+                        <input type="password" id="password" placeholder="••••••••">
+                    </div>
+                    <button class="btn btn-primary" onclick="login()">Iniciar sesión</button>
+                    <button class="btn btn-secondary" onclick="showModal('register-modal'); closeModal('login-modal')">¿No tienes cuenta? Regístrate</button>
+                </div>
+            </div>
+        </div>
+
+        <div class="modal" id="register-modal">
+            <div class="modal-content">
+                <button class="modal-close" onclick="closeModal('register-modal')">&times;</button>
+                <h2 style="color: #A77D4F; margin-bottom: 20px;">Crear Cuenta</h2>
+                <div class="auth-form">
+                    <div class="form-group">
+                        <label for="name">Nombre</label>
+                        <input type="text" id="name" placeholder="Tu nombre">
+                    </div>
+                    <div class="form-group">
+                        <label for="reg-email">Email</label>
+                        <input type="email" id="reg-email" placeholder="tu@email.com">
+                    </div>
+                    <div class="form-group">
+                        <label for="reg-password">Contraseña</label>
+                        <input type="password" id="reg-password" placeholder="••••••••">
+                    </div>
+                    <button class="btn btn-primary" onclick="register()">Crear cuenta</button>
+                </div>
+            </div>
+        </div>
+
+        <div class="modal" id="google-login-modal">
+            <div class="modal-content">
+                <button class="modal-close" onclick="closeModal('google-login-modal')">&times;</button>
+                <h2 style="color: #A77D4F; margin-bottom: 20px;">Continuar con Google</h2>
+                <p style="text-align: center; margin: 20px 0; color: #666;">Accede rápidamente con tu cuenta de Google</p>
+                <button class="btn btn-primary" onclick="googleLogin()">
+                    <i class="fab fa-google"></i> Continuar con Google
+                </button>
+            </div>
+        </div>
+
+        <div class="modal" id="welcome-modal">
+            <div class="modal-content">
+                <button class="modal-close" onclick="closeModal('welcome-modal')">&times;</button>
+                <h2 style="color: #A77D4F; margin-bottom: 20px;">¡Bienvenida, Queen!</h2>
+                <div style="text-align: center; margin: 20px 0;">
+                    <div style="width: 80px; height: 80px; background: linear-gradient(135deg, #A77D4F, #C49564); border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 15px; color: white; font-size: 30px;">
+                        <i class="fas fa-heart"></i>
+                    </div>
+                </div>
+                <p>Hola, hermosa Queen. Mi nombre es Cami y quiero darte la más cálida bienvenida a este programa que ha transformado la vida de miles de mujeres.</p>
+                <p>Los próximos 30 días serán un viaje de autodescubrimiento donde conectarás con tu fuerza interior, elevarás tu mentalidad y aprenderás a nutrir tu cuerpo con consciencia.</p>
+                <p>Este no es solo un programa de ejercicios o dieta. Es una transformación integral que te ayudará a representar la mujer poderosa que realmente eres.</p>
+                <p style="color: #A77D4F; font-weight: 600; text-align: center; margin-top: 20px;">¡Estoy emocionada de acompañarte en este camino! 💫</p>
+            </div>
+        </div>
+
+        <div class="modal" id="how-to-modal">
+            <div class="modal-content">
+                <button class="modal-close" onclick="closeModal('how-to-modal')">&times;</button>
+                <h2 style="color: #A77D4F; margin-bottom: 20px;">¿Cómo usar el programa?</h2>
+                
+                <div style="margin: 20px 0;">
+                    <h3 style="color: #A77D4F; font-size: 16px; margin-bottom: 10px;">📅 Ritmo recomendado</h3>
+                    <p style="margin-bottom: 15px;">Dedica entre 45-60 minutos diarios al programa. Puedes dividir el tiempo entre entrenamiento (20-30 min), mentalidad (15-20 min) y alimentación (10-15 min).</p>
+                </div>
+                
+                <div style="margin: 20px 0;">
+                    <h3 style="color: #A77D4F; font-size: 16px; margin-bottom: 10px;">🎯 Filosofía del método</h3>
+                    <p style="margin-bottom: 15px;">Creemos en la transformación integral: cuerpo, mente y espíritu. Cada pilar se complementa para crear un cambio duradero y auténtico.</p>
+                </div>
+                
+                <div style="margin: 20px 0;">
+                    <h3 style="color: #A77D4F; font-size: 16px; margin-bottom: 10px;">📈 Progresión</h3>
+                    <p style="margin-bottom: 15px;">Cada semana desbloquea nueva cuando completas la anterior. Esto asegura que absorbes completamente cada enseñanza antes de avanzar.</p>
+                </div>
+                
+                <div style="margin: 20px 0;">
+                    <h3 style="color: #A77D4F; font-size: 16px; margin-bottom: 10px;">💡 Consejos importantes</h3>
+                    <ul style="margin-left: 20px; color: #666;">
+                        <li>Sé consistente, no perfecta</li>
+                        <li>Escucha tu cuerpo siempre</li>
+                        <li>Participa en la comunidad</li>
+                        <li>Celebra cada pequeño logro</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <div class="modal" id="videocall-modal">
+            <div class="modal-content">
+                <button class="modal-close" onclick="closeModal('videocall-modal')">&times;</button>
+                <h2 style="color: #A77D4F; margin-bottom: 20px;">🎥 Videollamada Día 21</h2>
+                
+                <div style="text-align: center; margin: 30px 0;">
+                    <div style="width: 100px; height: 100px; background: linear-gradient(135deg, #A77D4F, #C49564); border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 15px; color: white; font-size: 40px;">
+                        <i class="fas fa-video"></i>
+                    </div>
+                </div>
+                
+                <p style="margin-bottom: 15px;">¡El día 21 nos encontraremos en vivo! Esta sesión grupal será un momento especial para:</p>
+                
+                <ul style="margin: 15px 0 15px 20px; color: #666;">
+                    <li>Compartir experiencias y logros</li>
+                    <li>Resolver dudas en vivo</li>
+                    <li>Motivación para la recta final</li>
+                    <li>Conexión con la comunidad</li>
+                </ul>
+                
+                <div style="background: rgba(167, 125, 79, 0.1); border-radius: 12px; padding: 20px; margin: 20px 0;">
+                    <h4 style="color: #A77D4F; margin-bottom: 10px;">📅 Detalles de la sesión</h4>
+                    <p><strong>Fecha:</strong> Día 21 de tu programa</p>
+                    <p><strong>Hora:</strong> 19:00 (España)</p>
+                    <p><strong>Duración:</strong> 60 minutos</p>
+                    <p><strong>Plataforma:</strong> Zoom</p>
+                </div>
+                
+                <button class="btn btn-primary" onclick="getZoomLink()" disabled style="opacity: 0.5;">
+                    <i class="fas fa-lock"></i> Disponible el día 21
+                </button>
+                
+                <p style="text-align: center; color: #999; font-size: 14px; margin-top: 15px;">El enlace se activará automáticamente cuando llegues al día 21</p>
+            </div>
+        </div>
+
+        <div class="modal" id="origen-modal">
+            <div class="modal-content">
+                <button class="modal-close" onclick="closeModal('origen-modal')">&times;</button>
+                <h2 style="color: #A77D4F; margin-bottom: 20px;">🚀 ORIGEN - Programa Avanzado</h2>
+                
+                <div style="text-align: center; margin: 30px 0;">
+                    <div style="width: 100px; height: 100px; background: linear-gradient(135deg, #A77D4F, #C49564); border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 15px; color: white; font-size: 40px;">
+                        <i class="fas fa-rocket"></i>
+                    </div>
+                </div>
+                
+                <p style="margin-bottom: 15px;">¿Lista para llevar tu transformación al siguiente nivel? ORIGEN es nuestro programa más completo y avanzado.</p>
+                
+                <h3 style="color: #A77D4F; font-size: 16px; margin: 20px 0 10px;">✨ Incluye:</h3>
+                <ul style="margin: 15px 0 15px 20px; color: #666;">
+                    <li>12 semanas de contenido exclusivo</li>
+                    <li>Entrenamientos de fuerza avanzados</li>
+                    <li>Mentalidad de alto rendimiento</li>
+                    <li>Nutrición personalizada</li>
+                    <li>Sesiones grupales semanales</li>
+                    <li>Acceso a comunidad VIP</li>
+                </ul>
+                
+                <div style="background: rgba(167, 125, 79, 0.1); border-radius: 12px; padding: 20px; margin: 20px 0;">
+                    <h4 style="color: #A77D4F; margin-bottom: 10px;">🎯 Para ti si:</h4>
+                    <p>Has completado el Método Queen 30D y quieres profundizar en tu transformación con un enfoque más avanzado y personalizado.</p>
+                </div>
+                
+                <button class="btn btn-primary" onclick="learnMoreOrigen()">
+                    Más información y inscripciones
+                </button>
+                
+                <p style="text-align: center; color: #999; font-size: 14px; margin-top: 15px;">Disponible solo para graduadas del Método Queen</p>
+            </div>
+        </div>
+
+        <!-- Modal de video -->
+        <div class="modal" id="video-modal">
+            <div class="modal-content" style="max-width: 90%; padding: 20px;">
+                <button class="modal-close" onclick="closeModal('video-modal')">&times;</button>
+                <div id="video-container" style="text-align: center;">
+                    <!-- El video se insertará aquí -->
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Estado de la aplicación
+        let appState = {
+            currentWeek: 1,
+            currentScreen: 'welcome-screen',
+            user: null,
+            progress: {
+                completedWeeks: [1],
+                completedDays: 8,
+                totalDays: 30,
+                exercisesCompleted: 12,
+                reflections: 5,
+                photosUploaded: 3
+            },
+            userData: {
+                mindsetNotes: '',
+                nutritionNotes: '',
+                exercisesCompleted: []
+            }
+        };
+
+        // Funciones de navegación
+        function showScreen(screenId, weekNumber = null) {
+            // Ocultar todas las pantallas
+            document.querySelectorAll('.screen').forEach(screen => {
+                screen.classList.remove('active');
+            });
+            
+            // Mostrar la pantalla seleccionada
+            document.getElementById(screenId).classList.add('active');
+            appState.currentScreen = screenId;
+            
+            // Configurar contenido específico por semana
+            if (weekNumber && screenId === 'week-detail-screen') {
+                setupWeekDetail(weekNumber);
+                appState.currentWeek = weekNumber;
+            }
+        }
+
+        function setupWeekDetail(weekNumber) {
+            const mottos = {
+                1: "ACTIVA TU FUERZA",
+                2: "ELEVA TU MENTE", 
+                3: "COME CON CONSCIENCIA",
+                4: "INTEGRA Y CONSOLIDA TU PODER"
+            };
+            
+            document.getElementById('week-motto').textContent = mottos[weekNumber];
+        }
+
+        function goToWeekDetail() {
+            showScreen('week-detail-screen');
+        }
+
+        function showWeekIfUnlocked(weekNumber) {
+            if (appState.progress.completedWeeks.includes(weekNumber - 1) || weekNumber === 1) {
+                showScreen('week-detail-screen', weekNumber);
+            } else {
+                showNotification('Completa la semana anterior para desbloquear esta semana');
+            }
+        }
+
+        // Funciones de modal
+        function showModal(modalId) {
+            document.getElementById(modalId).classList.add('show');
+        }
+
+        function closeModal(modalId) {
+            document.getElementById(modalId).classList.remove('show');
+        }
+
+        // Funciones de autenticación
+        function login() {
+            const email = document.getElementById('email').value;
+            const password = document.getElementById('password').value;
+            
+            if (email && password) {
+                appState.user = { email: email, name: 'Queen' };
+                closeModal('login-modal');
+                showNotification('¡Bienvenida de nuevo!');
+                showScreen('objectives-screen');
+            } else {
+                showNotification('Por favor completa todos los campos');
+            }
+        }
+
+        function register() {
+            const name = document.getElementById('name').value;
+            const email = document.getElementById('reg-email').value;
+            const password = document.getElementById('reg-password').value;
+            
+            if (name && email && password) {
+                appState.user = { email: email, name: name };
+                closeModal('register-modal');
+                showNotification('¡Cuenta creada exitosamente!');
+                showScreen('objectives-screen');
+            } else {
+                showNotification('Por favor completa todos los campos');
+            }
+        }
+
+        function googleLogin() {
+            appState.user = { email: 'usuario@gmail.com', name: 'Queen' };
+            closeModal('google-login-modal');
+            showNotification('¡Conectado con Google!');
+            showScreen('objectives-screen');
+        }
+
+        function logout() {
+            appState.user = null;
+            showScreen('welcome-screen');
+            showNotification('Sesión cerrada');
+        }
+
+        // Funciones de progreso
+        function markDayComplete() {
+            // Verificar si todos los ejercicios están marcados
+            const checkboxes = document.querySelectorAll('#training-screen input[type="checkbox"]');
+            const allChecked = Array.from(checkboxes).every(cb => cb.checked);
+            
+            if (allChecked) {
+                appState.progress.completedDays++;
+                appState.progress.exercisesCompleted += checkboxes.length;
+                showNotification('¡Día completado! 🎉');
+                updateProgress();
+            } else {
+                showNotification('Completa todos los ejercicios para marcar el día como completado');
+            }
+        }
+
+        function saveMindsetProgress() {
+            const notes = document.getElementById('mindset-notes').value;
+            appState.userData.mindsetNotes = notes;
+            appState.progress.reflections++;
+            showNotification('Reflexión guardada 💭');
+        }
+
+        function saveNutritionProgress() {
+            const notes = document.getElementById('nutrition-notes').value;
+            appState.userData.nutritionNotes = notes;
+            showNotification('Progreso nutricional guardado 🍃');
+        }
+
+        function updateProgress() {
+            const percentage = Math.round((appState.progress.completedDays / appState.progress.totalDays) * 100);
+            document.querySelectorAll('.progress-fill').forEach(fill => {
+                fill.style.width = percentage + '%';
+            });
+        }
+
+        // Funciones de media
+        function playVideo(videoId) {
+            const videoContainer = document.getElementById('video-container');
+            videoContainer.innerHTML = `
+                <iframe width="100%" height="315" 
+                    src="https://www.youtube.com/embed/${videoId}" 
+                    frameborder="0" 
+                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
+                    allowfullscreen
+                    style="border-radius: 12px;">
+                </iframe>
+            `;
+            showModal('video-modal');
+        }
+
+        function selectPhoto() {
+            document.getElementById('photo-input').click();
+        }
+
+        // Event listener para el selector de fotos
+        document.getElementById('photo-input').addEventListener('change', function(e) {
+            if (e.target.files.length > 0) {
+                appState.progress.photosUploaded++;
+                showNotification('¡Foto subida correctamente! 📸');
+            }
+        });
+
+        // Funciones de navegación
+        function setActiveNav(element) {
+            document.querySelectorAll('.nav-item').forEach(item => {
+                item.classList.remove('active');
+            });
+            element.classList.add('active');
+        }
+
+        // Funciones de comunidad
+        function joinWhatsApp() {
+            // En una implementación real, esto abriría el enlace de WhatsApp
+            showNotification('Redirigiendo al grupo de WhatsApp...');
+            // window.open('https://chat.whatsapp.com/tu-enlace-grupo', '_blank');
+        }
+
+        // Funciones de información
+        function getZoomLink() {
+            if (appState.progress.completedDays >= 21) {
+                showNotification('Enlace de Zoom copiado al portapapeles');
+                // navigator.clipboard.writeText('https://zoom.us/j/tu-enlace-reunion');
+            }
+        }
+
+        function learnMoreOrigen() {
+            showNotification('Redirigiendo a la página de ORIGEN...');
+            // En una implementación real, esto redirigiría a la página del programa
+        }
+
+        // Sistema de notificaciones
+        function showNotification(message) {
+            // Crear elemento de notificación
+            const notification = document.createElement('div');
+            notification.style.cssText = `
+                position: fixed;
+                top: 20px;
+                left: 50%;
+                transform: translateX(-50%);
+                background: #A77D4F;
+                color: white;
+                padding: 15px 25px;
+                border-radius: 25px;
+                z-index: 3000;
+                font-family: 'Poppins', sans-serif;
+                font-weight: 500;
+                box-shadow: 0 8px 25px rgba(167, 125, 79, 0.3);
+                animation: slideDown 0.3s ease-out;
+            `;
+            
+            // Agregar animación CSS
+            const style = document.createElement('style');
+            style.textContent = `
+                @keyframes slideDown {
+                    from {
+                        opacity: 0;
+                        transform: translateX(-50%) translateY(-20px);
+                    }
+                    to {
+                        opacity: 1;
+                        transform: translateX(-50%) translateY(0);
+                    }
+                }
+            `;
+            document.head.appendChild(style);
+            
+            notification.textContent = message;
+            document.body.appendChild(notification);
+            
+            // Remover después de 3 segundos
+            setTimeout(() => {
+                notification.style.animation = 'slideDown 0.3s ease-out reverse';
+                setTimeout(() => {
+                    document.body.removeChild(notification);
+                    document.head.removeChild(style);
+                }, 300);
+            }, 3000);
+        }
+
+        // Cerrar modales al hacer clic fuera
+        document.querySelectorAll('.modal').forEach(modal => {
+            modal.addEventListener('click', function(e) {
+                if (e.target === modal) {
+                    modal.classList.remove('show');
+                }
+            });
+        });
+
+        // Inicializar la aplicación
+        document.addEventListener('DOMContentLoaded', function() {
+            updateProgress();
+            
+            // Simulación de datos guardados
+            const savedNotes = 'Reflexión inicial: Me siento emocionada por comenzar este viaje...';
+            document.getElementById('mindset-notes').value = savedNotes;
+            
+            // Mostrar notificación de bienvenida
+            setTimeout(() => {
+                showNotification('¡Bienvenida a Real Camifit! 👑');
+            }, 1000);
+        });
+
+        // Manejar el botón atrás del navegador
+        window.addEventListener('popstate', function(e) {
+            if (appState.currentScreen !== 'welcome-screen') {
+                showScreen('welcome-screen');
+            }
+        });
+
+        // Prevenir zoom en dispositivos móviles
+        document.addEventListener('gesturestart', function(e) {
+            e.preventDefault();
+        });
+
+        // Optimización para PWA
+        if ('serviceWorker' in navigator) {
+            window.addEventListener('load', function() {
+                navigator.serviceWorker.register('/sw.js')
+                    .then(function(registration) {
+                        console.log('ServiceWorker registration successful');
+                    })
+                    .catch(function(err) {
+                        console.log('ServiceWorker registration failed');
+                    });
+            });
+        }
+    </script>
+</body>
+</html>
+
+        <!-- Pantalla 3: Paso a Paso (Semanas) -->
+        <div class="screen" id="weeks-screen">
+            <button class="back-btn" onclick="showScreen('objectives-screen')">
+                <i class="fas fa-arrow-left"></i>
+            </button>
+            <div class="screen-content">
+                <div class="logo logo-small">Paso a Paso</div>
+                
+                <div class="progress-bar">
+                    <div class="progress-fill" style="width: 25%"></div>
+                </div>
+                
+                <div class="week-card" onclick="showScreen('week-detail-screen', 1)">
+                    <h3>Semana 1</h3>
+                    <p>ACTIVA TU FUERZA</p>
+                </div>
+                
+                <div class="week-card locked" onclick="showWeekIfUnlocked(2)">
+                    <h3>Semana 2</h3>
+                    <p>ELEVA TU MENTE</p>
+                </div>
+                
+                <div class="week-card locked" onclick="showWeekIfUnlocked(3)">
+                    <h3>Semana 3</h3>
+                    <p>COME CON CONSCIENCIA</p>
+                </div>
+                
+                <div class="week-card locked" onclick="showWeekIfUnlocked(4)">
+                    <h3>Semana 4</h3>
+                    <p>INTEGRA Y CONSOLIDA TU PODER</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Pantalla 4: Detalle de Semana -->
+        <div class="screen" id="week-detail-screen">
+            <button class="back-btn" onclick="showScreen('weeks-screen')">
+                <i class="fas fa-arrow-left"></i>
+            </button>
+            <div class="screen-content">
+                <div class="week-motto" id="week-motto">ACTIVA TU FUERZA</div>
+                
+                <div class="pillar-grid">
+                    <div class="pillar-card primary" onclick="showScreen('training-screen')">
+                        <i class="fas fa-dumbbell"></i>
+                        <h3>Entrenamiento</h3>
+                        <p>Rutinas y ejercicios</p>
+                    </div>
+                    
+                    <div class="pillar-card secondary" onclick="showScreen('mindset-screen')">
+                        <i class="fas fa-brain"></i>
+                        <h3>Mentalidad</h3>
+                        <p>Introspección y reflexión</p>
+                    </div>
+                    
+                    <div class="pillar-card secondary" onclick="showScreen('nutrition-screen')">
+                        <i class="fas fa-apple-alt"></i>
+                        <h3>Alimentación</h3>
+                        <p>Nutrición consciente</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Pantalla 5: Entrenamiento -->
+        <div class="screen" id="training-screen">
+            <button class="back-btn" onclick="goToWeekDetail()">
+                <i class="fas fa-arrow-left"></i>
+            </button>
+            <div class="screen-content">
+                <div class="logo logo-small">Entrenamiento</div>
+                <h3 style="text-align: center; color: #A77D4F; margin-bottom: 20px;">Semana 1 - Día 1</h3>
+                
+                <div class="exercise-card">
+                    <div class="video-thumbnail" onclick="playVideo('dQw4w9WgXcQ')">
+                        <i class="fas fa-play"></i>
+                    </div>
+                    <h4>Sentadilla con peso corporal</h4>
+                    <div class="exercise-reps">
+                        <span>Semana 1: 3x12</span>
+                        <span>Semana 2: 3x15</span>
+                        <span>Semana 3: 4x12</span>
+                        <span>Semana 4: 4x15</span>
+                    </div>
+                    <div class="checkbox">
+                        <input type="checkbox" id="ex1">
+                        <label for="ex1">Completado</label>
+                    </div>
+                </div>
+                
+                <div class="exercise-card">
+                    <div class="video-thumbnail" onclick="playVideo('dQw4w9WgXcQ')">
+                        <i class="fas fa-play"></i>
+                    </div>
+                    <h4>Push-ups modificadas</h4>
+                    <div class="exercise-reps">
+                        <span>Semana 1: 3x8</span>
+                        <span>Semana 2: 3x10</span>
+                        <span>Semana 3: 3x12</span>
+                        <span>Semana 4: 4x10</span>
+                    </div>
+                    <div class="checkbox">
+                        <input type="checkbox" id="ex2">
+                        <label for="ex2">Completado</label>
+                    </div>
+                </div>
+                
+                <div class="exercise-card">
+                    <div class="video-thumbnail" onclick="playVideo('dQw4w9WgXcQ')">
+                        <i class="fas fa-play"></i>
+                    </div>
+                    <h4>Plancha</h4>
+                    <div class="exercise-reps">
+                        <span>Semana 1: 3x30seg</span>
+                        <span>Semana 2: 3x45seg</span>
+                        <span>Semana 3: 3x60seg</span>
+                        <span>Semana 4: 4x60seg</span>
+                    </div>
+                    <div class="checkbox">
+                        <input type="checkbox" id="ex3">
+                        <label for="ex3">Completado</label>
+                    </div>
+                </div>
+                
+                <button class="btn btn-primary" onclick="markDayComplete()">
+                    Marcar día como completado
+                </button>
+            </div>
+        </div>
+
+        <!-- Pantalla 6: Mentalidad -->
+        <div class="screen" id="mindset-screen">
+            <button class="back-btn" onclick="goToWeekDetail()">
+                <i class="fas fa-arrow-left"></i>
+            </button>
+            <div class="screen-content">
+                <div class="logo logo-small">Mentalidad</div>
+                
+                <div class="content-section">
+                    <h3>Semana 1: Reconoce tu fuerza interior</h3>
+                    <p>Esta semana nos enfocamos en reconocer y activar la fuerza que ya existe dentro de ti. Es momento de conectar con tu poder personal y establecer una base sólida para tu transformación.</p>
+                    
+                    <p><strong>Frase ancla de la semana:</strong><br>
+                    "Soy capaz de todo lo que me proponga, mi fuerza interior es infinita."</p>
+                </div>
+                
+                <div class="content-section">
+                    <h3>Ejercicio de reflexión</h3>
+                    <p>Escribe 3 momentos en tu vida donde has demostrado fortaleza y determinación:</p>
+                    <textarea class="notes-area" placeholder="Escribe tus reflexiones aquí..." id="mindset-notes"></textarea>
+                </div>
+                
+                <div class="content-section">
+                    <h3>Reto de la semana</h3>
+                    <div class="checkbox">
+                        <input type="checkbox" id="mindset-challenge">
+                        <label for="mindset-challenge">Cada mañana, repite tu frase ancla frente al espejo durante 2 minutos</label>
+                    </div>
+                </div>
+                
+                <button class="btn btn-primary" onclick="saveMindsetProgress()">
+                    Guardar progreso
+                </button>
+            </div>
+        </div>
+
+        <!-- Pantalla 7: Alimentación -->
+        <div class="screen" id="nutrition-screen">
+            <button class="back-btn" onclick="goToWeekDetail()">
+                <i class="fas fa-arrow-left"></i>
+            </button>
+            <div class="screen-content">
+                <div class="logo logo-small">Alimentación</div>
+                
+                <div class="content-section">
+                    <h3>Semana 1: Bases de la alimentación consciente</h3>
+                    <p>Esta semana establecemos las bases para una relación saludable con la comida. Aprenderemos a escuchar nuestro cuerpo y a nutrirnos de forma consciente.</p>
+                </div>
+                
+                <div class="content-section">
+                    <h3>Alimentos recomendados</h3>
+                    
+                    <div class="food-grid">
+                        <div class="food-card">
+                            <i class="fas fa-drumstick-bite"></i>
+                            <h4>Proteínas</h4>
+                            <p>Pollo, pescado, huevos, legumbres</p>
+                        </div>
+                        <div class="food-card">
+                            <i class="fas fa-bread-slice"></i>
+                            <h4>Carbohidratos</h4>
+                            <p>Avena, arroz integral, quinoa</p>
+                        </div>
+                        <div class="food-card">
+                            <i class="fas fa-seedling"></i>
+                            <h4>Grasas saludables</h4>
+                            <p>Aguacate, frutos secos, aceite de oliva</p>
+                        </div>
+                        <div class="food-card">
+                            <i class="fas fa-carrot"></i>
+                            <h4>Vegetales</h4>
+                            <p>Espinacas, brócoli, pimientos</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="content-section">
+                    <h3>Reto: Plato Harvard</h3>
+                    <p>Crea al menos una comida siguiendo el método del Plato Harvard: 1/2 vegetales, 1/4 proteína, 1/4 carbohidratos complejos.</p>
+                    
+                    <div class="video-thumbnail" onclick="selectPhoto()">
+                        <i class="fas fa-camera"></i>
+                        <p style="margin-top: 10px; font-size: 14px;">Sube foto de tu plato</p>
+                    </div>
+                    <input type="file" id="photo-input" accept="image/*" style="display: none;">
+                </div>
+                
+                <div class="content-section">
+                    <h3>Reflexión alimentaria</h3>
+                    <p>¿Cómo te sientes después de comer conscientemente?</p>
+                    <textarea class="notes-area" placeholder="Describe tus sensaciones y emociones..." id="nutrition-notes"></textarea>
+                </div>
+                
+                <div class="checkbox">
+                    <input type="checkbox" id="nutrition-challenge">
+                    <label for="nutrition-challenge">He practicado comer sin distracciones (sin teléfono/TV) al menos una vez hoy</label>
+                </div>
+                
+                <button class="btn btn-primary" onclick="saveNutritionProgress()">
+                    Guardar progreso
+                </button>
+            </div>
+        </div>
+
+        <!-- Pantalla 8: Progreso -->
+        <div class="screen" id="progress-screen">
+            <button class="back-btn" onclick="showScreen('objectives-screen')">
+                <i class="fas fa-arrow-left"></i>
+            </button>
+            <div class="screen-content">
+                <div class="logo logo-small">Mi Progreso</div>
+                
+                <div class="progress-bar" style="height: 12px; margin: 30px 0;">
+                    <div class="progress-fill" style="width: 25%"></div>
+                </div>
+                
+                <p style="text-align: center; color: #A77D4F; font-weight: 600; font-size: 18px; margin-bottom: 30px;">
+                    25% Completado - Día 8 de 30
+                </p>
+                
+                <div class="stats-grid">
+                    <div class="stat-card">
+                        <span class="stat-number">8</span>
+                        <span class="stat-label">Días completados</span>
+                    </div>
+                    <div class="stat-card">
+                        <span class="stat-number">12</span>
+                        <span class="stat-label">Entrenamientos</span>
+                    </div>
+                    <div class="stat-card">
+                        <span class="stat-number">5</span>
+                        <span class="stat-label">Reflexiones</span>
+                    </div>
+                    <div class="stat-card">
+                        <span class="stat-number">3</span>
+                        <span class="stat-label">Fotos subidas</span>
+                    </div>
+                </div>
+                
+                <div class="content-section">
+                    <h3>Progreso por semana</h3>
+                    
+                    <div style="margin: 15px 0;">
+                        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
+                            <span style="font-weight: 600;">Semana 1 - Activa tu fuerza</span>
+                            <span style="color: #A77D4F; font-weight: 600;">100%</span>
+                        </div>
+                        <div class="progress-bar" style="height: 6px; margin: 0;">
+                            <div class="progress-fill" style="width: 100%"></div>
+                        </div>
+                    </div>
+                    
+                    <div style="margin: 15px 0;">
+                        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
+                            <span style="font-weight: 600;">Semana 2 - Eleva tu mente</span>
+                            <span style="color: #A77D4F; font-weight: 600;">15%</span>
+                        </div>
+                        <div class="progress-bar" style="height: 6px; margin: 0;">
+                            <div class="progress-fill" style="width: 15%"></div>
+                        </div>
+                    </div>
+                    
+                    <div style="margin: 15px 0;">
+                        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
+                            <span style="font-weight: 600; opacity: 0.5;">Semana 3 - Come con consciencia</span>
+                            <span style="color: #ccc; font-weight: 600;">0%</span>
+                        </div>
+                        <div class="progress-bar" style="height: 6px; margin: 0;">
+                            <div class="progress-fill" style="width: 0%"></div>
+                        </div>
+                    </div>
+                    
+                    <div style="margin: 15px 0;">
+                        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
+                            <span style="font-weight: 600; opacity: 0.5;">Semana 4 - Integra y consolida</span>
+                            <span style="color: #ccc; font-weight: 600;">0%</span>
+                        </div>
+                        <div class="progress-bar" style="height: 6px; margin: 0;">
+                            <div class="progress-fill" style="width: 0%"></div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="content-section">
+                    <h3>🏆 Logros desbloqueados</h3>
+                    <div style="display: flex; align-items: center; margin: 10px 0;">
+                        <i class="fas fa-medal" style="color: #A77D4F; margin-right: 10px; font-size: 20px;"></i>
+                        <span>Primera semana completada</span>
+                    </div>
+                    <div style="display: flex; align-items: center; margin: 10px 0;">
+                        <i class="fas fa-fire" style="color: #A77D4F; margin-right: 10px; font-size: 20px;"></i>
+                        <span>Racha de 3 días consecutivos</span>
+                    </div>
+                    <div style="display: flex; align-items: center; margin: 10px 0; opacity: 0.5;">
+                        <i class="fas fa-crown" style="color: #ccc; margin-right: 10px; font-size: 20px;"></i>
+                        <span>Queen completa (Bloqueado)</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Pantalla 9: Comunidad -->
+        <div class="screen" id="community-screen">
+            <button class="back-btn" onclick="showScreen('objectives-screen')">
+                <i class="fas fa-arrow-left"></i>
+            </button>
+            <div class="screen-content">
+                <div class="logo logo-small">Comunidad</div>
+                
+                <div class="content-section">
+                    <h3>💬 Únete al grupo oficial</h3>
+                    <p>Conecta con otras Queen que están viviendo su transformación. Comparte tu progreso, dudas y celebra tus logros.</p>
+                    
+                    <button class="btn btn-primary" onclick="joinWhatsApp()">
+                        <i class="fab fa-whatsapp"></i> Unirse al WhatsApp
+                    </button>
+                </div>
+                
+                <div class="content-section">
+                    <h3>📢 Mensajes de Cami</h3>
+                    
+                    <div style="background: rgba(167, 125, 79, 0.1); border-radius: 12px; padding: 20px; margin: 15px 0;">
+                        <div style="display: flex; align-items: center; margin-bottom: 10px;">
+                            <div style="width: 40px; height: 40px; background: #A77D4F; border-radius: 50%; display: flex; align-items: center; justify-content: center; color: white; margin-right: 15px;">
+                                <i class="fas fa-user"></i>
+                            </div>
+                            <div>
+                                <strong style="color: #A77D4F;">Cami</strong>
+                                <span style="color: #999; font-size: 12px; margin-left: 10px;">Hace 2 horas</span>
+                            </div>
+                        </div>
+                        <p style="color: #555;">¡Felicitaciones a todas las Queen que han completado su primera semana! Recuerden: cada día es una oportunidad de crecer. 💪✨</p>
+                    </div>
+                    
+                    <div style="background: rgba(167, 125, 79, 0.1); border-radius: 12px; padding: 20px; margin: 15px 0;">
+                        <div style="display: flex; align-items: center; margin-bottom: 10px;">
+                            <div style="width: 40px; height: 40px; background: #A77D4F; border-radius: 50%; display: flex; align-items: center; justify-content: center; color: white; margin-right: 15px;">
+                                <i class="fas fa-user"></i>
+                            </div>
+                            <div>
+                                <strong style="color: #A77D4F;">Cami</strong>
+                                <span style="color: #999; font-size: 12px; margin-left: 10px;">Ayer</span>
+                            </div>
+                        </div>
+                        <p style="color: #555;">Tip del día: La alimentación consciente no se trata de restricción, sino de conexión. Escucha a tu cuerpo 🍃</p>
+                    </div>
+                </div>
+                
+                <div class="content-section">
+                    <h3>🌟 Testimonios de la comunidad</h3>
+                    
+                    <div style="border-left: 4px solid #A77D4F; padding-left: 15px; margin: 15px 0;">
+                        <p style="font-style: italic; color: #666;">"¡Ya voy por la semana 2 y me siento increíble! La mentalidad realmente está cambiando mi perspectiva."</p>
+                        <p style="font-size: 14px; color: #A77D4F; font-weight: 600; margin-top: 5px;">- María, 28 años</p>
+                    </div>
+                    
+                    <div style="border-left: 4px solid #A77D4F; padding-left: 15px; margin: 15px 0;">
+                        <p style="font-style: italic; color: #666;">"Los entrenamientos son perfectos para mi nivel. Me siento más fuerte cada día."</p>
+                        <p style="font-size: 14px; color: #A77D4F; font-weight: 600; margin-top: 5px;">- Ana, 35 años</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Pantalla 10: Perfil -->
+        <div class="screen" id="profile-screen">
+            <button class="back-btn" onclick="showScreen('objectives-screen')">
+                <i class="fas fa-arrow-left"></i>
+            </button>
+            <div class="screen-content">
+                <div class="logo logo-small">Mi Perfil</div>
+                
+                <div style="text-align: center; margin: 30px 0;">
+                    <div style="width: 100px; height: 100px; background: linear-gradient(135deg, #A77D4F, #C49564); border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 15px; color: white; font-size: 36px;">
+                        <i class="fas fa-crown"></i>
+                    </div>
+                    <h3 style="color: #A77D4F; margin-bottom: 5px;">¡Hola, Queen!</h3>
+                    <p style="color: #666;">Miembro desde enero 2025</p>
+                </div>
+                
+                <div class="content-section">
+                    <h3>📊 Mis estadísticas</h3>
+                    <div class="stats-grid">
+                        <div class="stat-card">
+                            <span class="stat-number">8</span>
+                            <span class="stat-label">Días activa</span>
+                        </div>
+                        <div class="stat-card">
+                            <span class="stat-number">12</span>
+                            <span class="stat-label">Entrenamientos</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="content-section">
+                    <h3>⚙️ Configuración</h3>
+                    
+                    <div style="display: flex; justify-content: space-between; align-items: center; margin: 15px 0;">
+                        <span>Recordatorios diarios</span>
+                        <label style="position: relative; display: inline-block; width: 50px; height: 24px;">
+                            <input type="checkbox" checked style="opacity: 0; width: 0; height: 0;">
+                            <span style="position: absolute; cursor: pointer; top: 0; left: 0; right: 0; bottom: 0; background: #A77D4F; transition: .4s; border-radius: 24px;"></span>
+                        </label>
+                    </div>
+                    
+                    <div style="display: flex; justify-content: space-between; align-items: center; margin: 15px 0;">
+                        <span>Notificaciones de comunidad</span>
+                        <label style="position: relative; display: inline-block; width: 50px; height: 24px;">
+                            <input type="checkbox" style="opacity: 0; width: 0; height: 0;">
+                            <span style="position: absolute; cursor: pointer; top: 0; left: 0; right: 0; bottom: 0; background: #ccc; transition: .4s; border-radius: 24px;"></span>
+                        </label>
+                    </div>
+                </div>
+                
+                <div class="content-section">
+                    <h3>🚀 Próximos programas</h3>
+                    <p>¿Lista para el siguiente nivel?</p>
+                    
+                    <div style="background: linear-gradient(135deg, #A77D4F20, #A77D4F10); border-radius: 15px; padding: 20px; margin: 15px 0; border: 2px solid #A77D4F;">
+                        <h4 style="color: #A77D4F; font-weight: 600; margin-bottom: 8px;">ORIGEN - Programa Avanzado</h4>
+                        <p style="color: #666; font-size: 14px; margin-bottom: 15px;">Profundiza en tu transformación con 12 semanas de contenido exclusivo.</p>
+                        <button class="btn btn-primary" onclick="showModal('origen-modal')">
+                            Más información
+                        </button>
+                    </div>
+                </div>
+                
+                <div class="content-section">
+                    <button class="btn btn-secondary" onclick="logout()">
+                        <i class="fas fa-sign-out-alt"></i> Cerrar sesión
+                    </button>
+                </div>
+            </div>
+        </div>
